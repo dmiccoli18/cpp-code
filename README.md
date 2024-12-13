@@ -1,1 +1,1 @@
-The contents of this repository focus on my programming capabilities in C++, as well as my custom built plug-ins for audio mixing software made with JUCE. 
+The contents of this repository focus on my programming files in C++, many of which being my custom-built plug-ins for audio mixing software made with JUCE that can be found in the AudioPlugins folder
