@@ -15,7 +15,6 @@
 /**
 */
 class AutoPanAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                     public juce::Slider::Listener,
                                      public juce::Button::Listener
 {
 public:
@@ -25,7 +24,7 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    void sliderValueChanged(juce::Slider * slider) override;
+    // void sliderValueChanged(juce::Slider * slider) override;
     void buttonClicked(juce::Button * button) override;
 
 private:
@@ -37,6 +36,9 @@ private:
     juce::Slider depthSlider;
     juce::Slider angleSlider;
     juce::ToggleButton bypassButton;
+    
+public:
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>> sliderAttachments;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AutoPanAudioProcessorEditor)
 };

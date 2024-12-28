@@ -18,34 +18,39 @@ AutoPanAudioProcessorEditor::AutoPanAudioProcessorEditor (AutoPanAudioProcessor&
     setSize (400, 300);
     
     // rate slider
-    rateSlider.addListener(this);
+    // rateSlider.addListener(this);
     rateSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     rateSlider.setBounds(10,90,120,120);
-    rateSlider.setRange(1.f,5.f,.1f);
-    // gainSlider.setSkewFactorFromMidPoint(1.f);
+    // rateSlider.setRange(1.f,5.f,.1f);
     rateSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    rateSlider.setValue(audioProcessor.Rate);
+    //rateSlider.setValue(audioProcessor.Rate);
     addAndMakeVisible(rateSlider);
     
-    // depth slider
-    depthSlider.addListener(this);
-    depthSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-    depthSlider.setBounds(150,90,120,120);
-    depthSlider.setRange(0.f,100.f,0.01f);
-    // gainSlider.setSkewFactorFromMidPoint(1.f);
-    depthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    depthSlider.setValue(audioProcessor.depth);
-    addAndMakeVisible(depthSlider);
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"RATE",rateSlider));
+    
     
     // depth slider
-    angleSlider.addListener(this);
+    // depthSlider.addListener(this);
+    depthSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    depthSlider.setBounds(150,90,120,120);
+    //depthSlider.setRange(0.f,100.f,0.01f);
+    depthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
+    // depthSlider.setValue(audioProcessor.depth);
+    addAndMakeVisible(depthSlider);
+    
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"DEPTH",depthSlider));
+    
+    // angle slider
+    // angleSlider.addListener(this);
     angleSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     angleSlider.setBounds(290,90,120,120);
-    angleSlider.setRange(0.f,180.f,1.f);
+    // angleSlider.setRange(0.f,180.f,1.f);
     // gainSlider.setSkewFactorFromMidPoint(1.f);
     angleSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    angleSlider.setValue(audioProcessor.phase);
+    // angleSlider.setValue(audioProcessor.phase);
     addAndMakeVisible(angleSlider);
+    
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"PHASE",angleSlider));
     
     // mute button
     bypassButton.addListener(this);
@@ -79,17 +84,17 @@ void AutoPanAudioProcessorEditor::resized()
     // subcomponents in your editor..
 }
 
-void AutoPanAudioProcessorEditor::sliderValueChanged(juce::Slider *slider){
-    if (slider == &rateSlider){
-        audioProcessor.Rate = rateSlider.getValue();
-    }
-    if (slider == &depthSlider){
-        audioProcessor.depth = depthSlider.getValue();
-    }
-    if (slider == &angleSlider){
-        audioProcessor.phase = angleSlider.getValue();
-    }
-}
+//void AutoPanAudioProcessorEditor::sliderValueChanged(juce::Slider *slider){
+//    if (slider == &rateSlider){
+//        audioProcessor.Rate = rateSlider.getValue();
+//    }
+//    if (slider == &depthSlider){
+//        audioProcessor.depth = depthSlider.getValue();
+//    }
+//    if (slider == &angleSlider){
+//        audioProcessor.phase = angleSlider.getValue();
+//    }
+//}
 
 void AutoPanAudioProcessorEditor::buttonClicked(juce::Button *button){
     if (button == &bypassButton){

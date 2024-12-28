@@ -55,10 +55,13 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
     
-    float Rate = 1.f;
-    float depth = 50.f;
-    float phase = 0.f;
+    float Rate;
+    float depth;
+    float phase;
     bool bypassOn = false;
+    
+    juce::AudioProcessorValueTreeState state;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     
 private:
     AutoPan autoPan{Rate,depth,phase};

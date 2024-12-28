@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="WXbroC" name="AutoPan" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginFormats="buildVST3">
   <MAINGROUP id="FYIkth" name="AutoPan">
     <GROUP id="{4C6A1B02-AADD-AC3E-2D37-5AAAC9115AAA}" name="Source">
       <FILE id="FJBqg2" name="PluginProcessor.cpp" compile="1" resource="0"
