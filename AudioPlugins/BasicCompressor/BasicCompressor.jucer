@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="GWHI05" name="BasicCompressor" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginFormats="buildVST3">
   <MAINGROUP id="HZNQ4p" name="BasicCompressor">
     <GROUP id="{3CD17B40-3276-293E-9D22-0C03826AE9F0}" name="Source">
       <FILE id="a9vyOx" name="Compressor.cpp" compile="1" resource="0" file="Source/Compressor.cpp"/>
@@ -19,7 +20,7 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="BasicCompressor"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="BasicCompressor" enablePluginBinaryCopyStep="1"/>
         <CONFIGURATION isDebug="0" name="Release" targetName="BasicCompressor"/>
       </CONFIGURATIONS>
       <MODULEPATHS>

@@ -4,25 +4,20 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>BasicCompressor - AU.xcscheme_^#shared#^_</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>3</integer>
-		</dict>
 		<key>BasicCompressor - All.xcscheme_^#shared#^_</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>1</integer>
-		</dict>
-		<key>BasicCompressor - Shared Code.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
-		<key>BasicCompressor - Standalone Plugin.xcscheme_^#shared#^_</key>
+		<key>BasicCompressor - Shared Code.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>4</integer>
+			<integer>1</integer>
+		</dict>
+		<key>BasicCompressor - VST3 Manifest Helper.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
 		</dict>
 		<key>BasicCompressor - VST3.xcscheme_^#shared#^_</key>
 		<dict>
@@ -32,6 +27,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>522725236E90F6933C10EE24</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>DC872660D16740BA1576A2B4</key>
 		<dict>
 			<key>primary</key>

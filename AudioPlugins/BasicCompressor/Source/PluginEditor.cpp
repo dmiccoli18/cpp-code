@@ -18,49 +18,59 @@ BasicCompressorAudioProcessorEditor::BasicCompressorAudioProcessorEditor (BasicC
     setSize (400, 300);
     
     // attack
-    attackSlider.addListener(this);
+    //attackSlider.addListener(this);
     attackSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     attackSlider.setBounds(10,10,120,120);
-    attackSlider.setRange(1, 100, 1);
+    //attackSlider.setRange(1, 100, 1);
     attackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    attackSlider.setValue(audioProcessor.attack);
+    //attackSlider.setValue(audioProcessor.attack);
     addAndMakeVisible(attackSlider);
     
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"ATTACK",attackSlider));
+    
     // release
-    releaseSlider.addListener(this);
+    //releaseSlider.addListener(this);
     releaseSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     releaseSlider.setBounds(10,140,120,120);
-    releaseSlider.setRange(1, 100, 1);
+    //releaseSlider.setRange(1, 100, 1);
     releaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    releaseSlider.setValue(audioProcessor.release);
+    //releaseSlider.setValue(audioProcessor.release);
     addAndMakeVisible(releaseSlider);
     
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"RELEASE",releaseSlider));
+    
     // threshold
-    thresholdSlider.addListener(this);
+    //thresholdSlider.addListener(this);
     thresholdSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     thresholdSlider.setBounds(140,10,120,120);
-    thresholdSlider.setRange(-30.f, 0.f,.1f);
+    //thresholdSlider.setRange(-30.f, 0.f,.1f);
     thresholdSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    thresholdSlider.setValue(audioProcessor.threshold);
+    //thresholdSlider.setValue(audioProcessor.threshold);
     addAndMakeVisible(thresholdSlider);
     
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"THRESHOLD",thresholdSlider));
+    
     // ratio
-    ratioSlider.addListener(this);
+    //ratioSlider.addListener(this);
     ratioSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     ratioSlider.setBounds(140,140,120,120);
-    ratioSlider.setRange(1.f, 20.f,.1f);
+    //ratioSlider.setRange(1.f, 20.f,.1f);
     ratioSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    ratioSlider.setValue(audioProcessor.ratio);
+    //ratioSlider.setValue(audioProcessor.ratio);
     addAndMakeVisible(ratioSlider);
     
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"RATIO",ratioSlider));
+    
     // gain
-    gainKnob.addListener(this);
+    //gainKnob.addListener(this);
     gainKnob.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     gainKnob.setBounds(260,85,120,120);
-    gainKnob.setRange(0.f, 10.f, .1f);
+    //gainKnob.setRange(0.f, 10.f, .1f);
     gainKnob.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    gainKnob.setValue(audioProcessor.gain);
+    //gainKnob.setValue(audioProcessor.gain);
     addAndMakeVisible(gainKnob);
+    
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"GAIN",gainKnob));
     
     // bypass
     bypassButton.addListener(this);
@@ -97,27 +107,27 @@ void BasicCompressorAudioProcessorEditor::resized()
     // subcomponents in your editor..
 }
 
-void BasicCompressorAudioProcessorEditor::sliderValueChanged(juce::Slider *slider){
-    if(slider == &attackSlider){
-        audioProcessor.attack = attackSlider.getValue();
-    }
-    
-    if(slider == &releaseSlider){
-        audioProcessor.release = releaseSlider.getValue();
-    }
-    
-    if(slider == &thresholdSlider){
-        audioProcessor.threshold = thresholdSlider.getValue();
-    }
-    
-    if(slider == &ratioSlider){
-        audioProcessor.ratio = ratioSlider.getValue();
-    }
-    
-    if(slider == &gainKnob){
-        audioProcessor.gain= gainKnob.getValue();
-    }
-}
+//void BasicCompressorAudioProcessorEditor::sliderValueChanged(juce::Slider *slider){
+//    if(slider == &attackSlider){
+//        audioProcessor.attack = attackSlider.getValue();
+//    }
+//
+//    if(slider == &releaseSlider){
+//        audioProcessor.release = releaseSlider.getValue();
+//    }
+//
+//    if(slider == &thresholdSlider){
+//        audioProcessor.threshold = thresholdSlider.getValue();
+//    }
+//
+//    if(slider == &ratioSlider){
+//        audioProcessor.ratio = ratioSlider.getValue();
+//    }
+//
+//    if(slider == &gainKnob){
+//        audioProcessor.gain= gainKnob.getValue();
+//    }
+//}
 
 void BasicCompressorAudioProcessorEditor::buttonClicked(juce::Button *button){
     if(button == &bypassButton){

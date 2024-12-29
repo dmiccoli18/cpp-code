@@ -61,6 +61,9 @@ public:
     float gain = 0.f;
     bool bypassOn = false;
     
+    juce::AudioProcessorValueTreeState state;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    
 private:
     Compressor compressor{attack,release,threshold,ratio};
     //==============================================================================

@@ -19,13 +19,29 @@ BasicCompressorAudioProcessor::BasicCompressorAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), state(*this, nullptr, "PARAMETERS", createParameterLayout())
 #endif
 {
 }
 
 BasicCompressorAudioProcessor::~BasicCompressorAudioProcessor()
 {
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout BasicCompressorAudioProcessor::createParameterLayout(){
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("ATTACK", "Attack",1.f, 100.f, 1.f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RELEASE", "Release",1.f, 100.f, 1.f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("THRESHOLD", "Threshold",-30.f, 0.f,.1f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("RATIO", "Ratio",1.f, 20.f,.1f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("GAIN", "Gain",0.f, 10.f, .1f));
+    
+    return{params.begin(),params.end()};
 }
 
 //==============================================================================
@@ -150,10 +166,15 @@ void BasicCompressorAudioProcessor::processBlock (juce::AudioBuffer<float>& buff
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
+    float attack = *state.getRawParameterValue("ATTACK");
     compressor.setAttack(attack);
+    float release = *state.getRawParameterValue("RELEASE");
     compressor.setRelease(release);
+    float threshold = *state.getRawParameterValue("THRESHOLD");
     compressor.setThreshold(threshold);
+    float ratio = *state.getRawParameterValue("RATIO");
     compressor.setRatio(ratio);
+    float gain = *state.getRawParameterValue("GAIN");
     compressor.setGain(gain);
     
     if (bypassOn){
@@ -204,12 +225,19 @@ void BasicCompressorAudioProcessor::getStateInformation (juce::MemoryBlock& dest
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    auto currentState = state.copyState();
+    std::unique_ptr<juce::XmlElement> xml (currentState.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void BasicCompressorAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xml (getXmlFromBinary(data, sizeInBytes));
+    if (xml && xml->hasTagName(state.state.getType())){
+        state.replaceState(juce::ValueTree::fromXml(*xml));
+    }
 }
 
 //==============================================================================
