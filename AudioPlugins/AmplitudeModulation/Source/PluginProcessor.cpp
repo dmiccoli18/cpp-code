@@ -19,13 +19,24 @@ AmplitudeModulationAudioProcessor::AmplitudeModulationAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), state(*this, nullptr, "PARAMETERS", createParameterLayout())
 #endif
 {
 }
 
 AmplitudeModulationAudioProcessor::~AmplitudeModulationAudioProcessor()
 {
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout AmplitudeModulationAudioProcessor::createParameterLayout(){
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    
+    // sliders
+    params.push_back( std::make_unique<juce::AudioParameterFloat> ("RATE","Rate",1.f,5.f,1.f) );
+    
+    params.push_back( std::make_unique<juce::AudioParameterFloat> ("DEPTH","Depth",0.f,100.f,0.01f));
+    
+    return {params.begin(), params.end()};
 }
 
 //==============================================================================
@@ -152,7 +163,10 @@ void AmplitudeModulationAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
     
+    float Rate = *state.getRawParameterValue("RATE");
     ampModulation.setRate(Rate);
+    
+    float depth = *state.getRawParameterValue("DEPTH");
     ampModulation.setDepth(depth);
     
     

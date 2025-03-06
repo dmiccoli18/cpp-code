@@ -14,8 +14,7 @@
 //==============================================================================
 /**
 */
-class AmplitudeModulationAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                                 public juce::Slider::Listener
+class AmplitudeModulationAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
     AmplitudeModulationAudioProcessorEditor (AmplitudeModulationAudioProcessor&);
@@ -24,7 +23,7 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    void sliderValueChanged(juce::Slider * slider) override;
+    //void sliderValueChanged(juce::Slider * slider) override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -33,6 +32,9 @@ private:
     
     juce::Slider rateSlider;
     juce::Slider depthSlider;
+    
+public:
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>> sliderAttachments;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AmplitudeModulationAudioProcessorEditor)
 };

@@ -56,6 +56,9 @@ public:
 
     float Rate = 1.f;
     float depth = 75.f;
+    
+    juce::AudioProcessorValueTreeState state;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 private:
     AmpModulation ampModulation{Rate,depth};
     

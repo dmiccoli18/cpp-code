@@ -33,7 +33,7 @@ private:
     float depth = 100.f; // %
     float phase = 0.f; // phase angle offset for stereo
     
-    float  angleChange = 0.f;
+    float angleChange = 0.f;
     float amplitude = 0.5f;
     float dc = 0.5f;
     

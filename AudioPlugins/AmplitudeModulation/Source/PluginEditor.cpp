@@ -18,24 +18,28 @@ AmplitudeModulationAudioProcessorEditor::AmplitudeModulationAudioProcessorEditor
     setSize (400, 300);
     
     // rate slider
-    rateSlider.addListener(this);
+    //rateSlider.addListener(this);
     rateSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     rateSlider.setBounds(40,90,120,120);
-    rateSlider.setRange(1.f,5.f,.1f);
+    //rateSlider.setRange(1.f,5.f,.1f);
     // gainSlider.setSkewFactorFromMidPoint(1.f);
     rateSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    rateSlider.setValue(audioProcessor.Rate);
+    //rateSlider.setValue(audioProcessor.Rate);
     addAndMakeVisible(rateSlider);
     
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"RATE",rateSlider));
+    
     // depth slider
-    depthSlider.addListener(this);
+    //depthSlider.addListener(this);
     depthSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     depthSlider.setBounds(180,90,120,120);
-    depthSlider.setRange(0.f,100.f,0.01f);
+    //depthSlider.setRange(0.f,100.f,0.01f);
     // gainSlider.setSkewFactorFromMidPoint(1.f);
     depthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 30);
-    depthSlider.setValue(audioProcessor.depth);
+    //depthSlider.setValue(audioProcessor.depth);
     addAndMakeVisible(depthSlider);
+    
+    sliderAttachments.emplace_back(new juce::AudioProcessorValueTreeState::SliderAttachment(audioProcessor.state,"DEPTH",depthSlider));
 }
 
 AmplitudeModulationAudioProcessorEditor::~AmplitudeModulationAudioProcessorEditor()
@@ -61,11 +65,10 @@ void AmplitudeModulationAudioProcessorEditor::resized()
     // subcomponents in your editor.
 }
 
-void AmplitudeModulationAudioProcessorEditor::sliderValueChanged(juce::Slider *slider){
-    if (slider == &rateSlider){
-        audioProcessor.Rate = rateSlider.getValue();
-    }
-    if (slider == &depthSlider){
-        audioProcessor.depth = depthSlider.getValue();
-    }
-}
+//void AmplitudeModulationAudioProcessorEditor::sliderValueChanged(juce::Slider *slider){
+//    if (slider == &rateSlider){
+//        audioProcessor.Rate = rateSlider.getValue();
+//    }
+//    if (slider == &depthSlider){
+//        audioProcessor.depth = depthSlider.getValue();
+//    }
