@@ -15,9 +15,8 @@
 /**
 */
 class EQAudioProcessorEditor  : public juce::AudioProcessorEditor,
-                                public juce::Slider::Listener,
-                                public juce::ComboBox::Listener,
-                                public juce::Button::Listener
+juce::Button::Listener,
+juce::ComboBox::Listener
 
 {
 public:
@@ -27,9 +26,9 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    void sliderValueChanged(juce::Slider * slider) override;
-    void buttonClicked(juce::Button * button) override;
-    void comboBoxChanged(juce::ComboBox * comboBox) override;
+    
+    void buttonClicked (juce::Button *button) override;
+    void comboBoxChanged (juce::ComboBox *comboBox) override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -52,6 +51,11 @@ private:
     juce::ToggleButton NToggle;
     juce::ToggleButton N1Toggle;
     juce::ToggleButton HPFToggle;
+    
+public:
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>> sliderAttachments;
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment>> buttonAttachments;
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment>> comboAttachments;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EQAudioProcessorEditor)
 };

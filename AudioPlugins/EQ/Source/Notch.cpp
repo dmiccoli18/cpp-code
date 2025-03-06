@@ -21,8 +21,6 @@ void Notch::setQ (double newQ){
 }
 
 void Notch::updateCoefficients(){
-    double A = std::pow(10.0, ampdB / 40.0); // Linear amplitude
-    
     // Normalize frequency
     double w0 = (2.0 * M_PI) * freq / Fs;
     

@@ -25,6 +25,11 @@ void EQ4LPF::setQ (double newQ){
     EQ4LPF::updateCoefficients();
 }
 
+void EQ4LPF::setAmp (double newAmp){
+    ampdB = newAmp;
+    EQ4LPF::updateCoefficients();
+}
+
 void EQ4LPF::updateCoefficients(){
     double A = std::pow(10.0, ampdB / 40.0); // Linear amplitude
     
@@ -34,6 +39,12 @@ void EQ4LPF::updateCoefficients(){
     // Bandwidth/slope/resonance parameter
     double alpha = std::sin(w0) / (2.0 * Q);
     double cw0 = std::cos(w0);
+    double S = freq/Fs;
+    
+    if (passShelf == SHELF){
+        alpha = (std::sin(w0)/2.0) * std::sqrt(((A + 1/A) * (1/S + 1)) + 2);
+        cw0 = std::cos(w0);
+    }
     
     switch(passShelf){
         case PASS:{

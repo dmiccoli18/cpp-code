@@ -12,11 +12,13 @@
 
 double EQ4Band::filterSample(double x, int channel)
 {
-    // Output, processed sample (Direct Form 1)
+
+    // Direct Form 1
     double y = b0 * x + b1 * x1[channel] + b2 * x2[channel]
             + (-a1) * y1[channel] + (-a2) * y2[channel];
 
-    x2[channel] = x1[channel]; // store delay samples for next process step
+    // store delay samples for next process step
+    x2[channel] = x1[channel];
     x1[channel] = x;
     y2[channel] = y1[channel];
     y1[channel] = y;
@@ -27,7 +29,7 @@ double EQ4Band::filterSample(double x, int channel)
 void EQ4Band::setFs(double newFs)
 {
     Fs = newFs;
-    updateCoefficients(); // Need to update if Fs changes
+    updateCoefficients(); // Need to update if Fs changes, chances are mostly not
 };
 
 void EQ4Band::setFreq(double newFreq)

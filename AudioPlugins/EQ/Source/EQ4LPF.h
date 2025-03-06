@@ -18,8 +18,11 @@ public:
     void setFilter (filterType newFilterType);
     void setFreq (double newFreq);
     void setQ (double newQ);
+    void setAmp (double ampdB);
+    
 private:
     filterType passShelf = PASS;
     void updateCoefficients();
     double freq = 20;
+    double ampdB = 3;
 };

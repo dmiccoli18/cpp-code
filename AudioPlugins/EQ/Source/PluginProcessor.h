@@ -59,20 +59,26 @@ public:
     EQ4LPF::filterType passShelf = EQ4LPF::filterType::PASS;
     EQ4HPF::filterType PassShelf = EQ4HPF::filterType::PASS;
     
-    double LFreq = 20000;
-    double HFreq = 20;
-    double NFreq = 1000;
-    double N1Freq = 2000;
-    double Fs = 48000;
-    double LQ = .707;
-    double HQ = .707;
-    double NQ = .707;
-    double N1Q = .707;
+    
+    float LFreq = 20000;
+    float HFreq = 20;
+    float NFreq = 1000;
+    float N1Freq = 2000;
+    float Fs = 48000;
+    float LQ = .707;
+    float HQ = .707;
+    float NQ = .707;
+    float N1Q = .707;
+    
+    double ampdB = 6;
     
     bool LPFOn = true;
     bool NFOn = true;
     bool NF1On = true;
     bool HPFOn = true;
+    
+    juce::AudioProcessorValueTreeState state;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 private:
     
     EQ4LPF lowPass;

@@ -25,6 +25,11 @@ void EQ4HPF::setQ (double newQ){
     EQ4HPF::updateCoefficients();
 }
 
+void EQ4HPF::setAmp (double newAmp){
+    ampdB = newAmp;
+    EQ4HPF::updateCoefficients();
+}
+
 // code doesn't pull from this update coefficients, find out why
 void EQ4HPF::updateCoefficients(){
     double A = std::pow(10.0, ampdB / 40.0); // Linear amplitude
@@ -35,7 +40,12 @@ void EQ4HPF::updateCoefficients(){
     // Bandwidth/slope/resonance parameter
     double alpha = std::sin(w0) / (2.0 * Q);
     double cw0 = std::cos(w0);
-
+    double S = freq/Fs;
+    
+    if (passShelf == SHELF){
+        alpha = (std::sin(w0)/2.0) * std::sqrt(((A + 1/A) * (1/S + 1)) + 2);
+        cw0 = std::cos(w0);
+    }
     
     switch(passShelf){
         case PASS: {

@@ -19,13 +19,41 @@ EQAudioProcessor::EQAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), state(*this, nullptr, "PARAMETERS", createParameterLayout())
 #endif
 {
 }
 
 EQAudioProcessor::~EQAudioProcessor()
 {
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout EQAudioProcessor::createParameterLayout(){
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    
+    //LPF
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("LOW", "Low",8000.f, 20000.f, 1.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("LOWQ", "LowQ",.1f, 10.f, .1f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("LBP", "LowBP", true));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("LCOMBO", "LowCombo", juce::StringArray("Low Pass","Low Shelf"), 0));
+    
+    //Notch 1
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("NOTCH1", "Notch1",800.f, 6000.f, 1.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("NOTCH1Q", "Notch1Q",.1f, 10.f, .1f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("NBP", "NotchBP", true));
+    
+    //Notch 2
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("NOTCH2", "Notch2",5000.f, 10000.f, 1.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("NOTCH2Q", "Notch2Q",.1f, 10.f, .1f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("N1BP", "Notch1BP", true));
+    
+    //HPF
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGH", "High",20.f, 1000.f, 1.f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGHQ", "HighQ",.1f, 10.f, .1f));
+    params.push_back(std::make_unique<juce::AudioParameterBool>("HBP", "HighBP", true));
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("HCOMBO", "HighCombo", juce::StringArray("High Pass","High Shelf"), 0));
+    
+    return {params.begin(), params.end()};
 }
 
 //==============================================================================
@@ -151,27 +179,40 @@ void EQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Mid
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
     
-    lowPass.setFreq(LFreq);
+    float LFreq = *state.getRawParameterValue("LOW");
+    lowPass.setFreq((double)LFreq);
     lowPass.setFs(48000);
-    lowPass.setQ(LQ);
+    float LQ = *state.getRawParameterValue("LOWQ");
+    lowPass.setQ((double)LQ);
+    lowPass.setAmp(ampdB);
+    lowPass.setFilter(passShelf);
     
-    highPass.setFreq(HFreq);
+    //passShelf = *state.getRawParameterValue("LCOMBO");
+    
+    float HFreq = *state.getRawParameterValue("HIGH");
+    highPass.setFreq((double)HFreq);
     highPass.setFs(48000);
-    highPass.setQ(HQ);
+    float HQ = *state.getRawParameterValue("HIGHQ");
+    highPass.setQ((double)HQ);
+    highPass.setAmp(ampdB);
+    highPass.setFilter(PassShelf);
     
-    notch.setFreq(NFreq);
+    float NFreq = *state.getRawParameterValue("NOTCH1");
+    notch.setFreq((double)NFreq);
     notch.setFs(48000);
-    notch.setQ(NQ);
+    float NQ = *state.getRawParameterValue("NOTCH1Q");
+    notch.setQ((double)NQ);
     
-    notch1.setFreq(N1Freq);
+    float N1Freq = *state.getRawParameterValue("NOTCH2");
+    notch1.setFreq((double)N1Freq);
     notch1.setFs(48000);
-    notch1.setQ(N1Q);
+    float N1Q = *state.getRawParameterValue("NOTCH2Q");
+    notch1.setQ((double)N1Q);
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         for (int n = 0; n < buffer.getNumSamples() ; ++n){
             float x = buffer.getReadPointer(channel)[n];
-            // do something
             double y = x;
             
             // LPF
@@ -228,12 +269,20 @@ void EQAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    
+    auto currentState = state.copyState();
+    std::unique_ptr<juce::XmlElement> xml (currentState.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void EQAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xml (getXmlFromBinary(data, sizeInBytes));
+    if (xml && xml->hasTagName(state.state.getType())){
+        state.replaceState(juce::ValueTree::fromXml(*xml));
+    }
 }
 
 //==============================================================================
