@@ -60,6 +60,9 @@ public:
     double Q = 2;
     double wetDry = 1;
     
+    juce::AudioProcessorValueTreeState state;
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    
 private:
     WahWah Wah;
     //==============================================================================

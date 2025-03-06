@@ -19,13 +19,26 @@ WahWahAudioProcessor::WahWahAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), state(*this, nullptr, "PARAMETERS", createParameterLayout())
 #endif
 {
 }
 
 WahWahAudioProcessor::~WahWahAudioProcessor()
 {
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout WahWahAudioProcessor::createParameterLayout(){
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("RATE",1) ,"Rate",.1f, 5.f, .01f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("FREQ", 1), "Freq",250.f,5000.f,1.f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("WIDTH",1), "Width",250.f,2000.f,1.f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("WETDRY",1), "WetDry",0.f, 1.f,.01f));
+    
+    return{params.begin(),params.end()};
 }
 
 //==============================================================================
@@ -151,12 +164,22 @@ void WahWahAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
     //Wah.setFreq(freq);
-    Wah.setRate(rate);
-    Wah.setWidth(width);
-    Wah.setDC(dc);
+    float rate = *state.getRawParameterValue("RATE");
+    Wah.setRate((double)rate);
+    
+    float dc = *state.getRawParameterValue("FREQ");
+    Wah.setDC((double)dc);
+    
+    float width = *state.getRawParameterValue("WIDTH");
+    Wah.setWidth((double)width);
+    
+    float wetDry = *state.getRawParameterValue("WETDRY");
+    Wah.setWetDry((double)wetDry);
+    
+    // non-changeable values
     Wah.setFs(48000);
     Wah.setQ(Q);
-    Wah.setWetDry(wetDry);
+
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -188,12 +211,19 @@ void WahWahAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     // You should use this method to store your parameters in the memory block.
     // You could do that either as raw data, or use the XML or ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
+    auto currentState = state.copyState();
+    std::unique_ptr<juce::XmlElement> xml (currentState.createXml());
+    copyXmlToBinary(*xml, destData);
 }
 
 void WahWahAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<juce::XmlElement> xml (getXmlFromBinary(data, sizeInBytes));
+    if (xml && xml->hasTagName(state.state.getType())){
+        state.replaceState(juce::ValueTree::fromXml(*xml));
+    }
 }
 
 //==============================================================================
